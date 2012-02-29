@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1330444059 source:c:\documents and settings\3z\task4\task4_6\main.cpp
+	"main.h"
+	<iostream>
+
+1330443689 c:\documents and settings\3z\task4\task4_6\main.h
+	<iostream>
+	<stdlib.h>
+	<time.h>
+

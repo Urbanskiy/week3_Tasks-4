@@ -1,0 +1,22 @@
+# depslib dependency file v1.0
+1330507439 source:c:\documents and settings\3z\task4\task4_19\task4_19\main.cpp
+	"main.h"
+	"TApForm.h"
+	<iostream>
+	<string.h>
+	<stdlib.h>
+	<stdio.h>
+
+1330461896 c:\documents and settings\3z\task4\task4_19\task4_19\main.h
+	<iostream>
+	<string.h>
+	<stdlib.h>
+	<stdio.h>
+
+1330507462 c:\documents and settings\3z\task4\task4_19\task4_19\tapform.h
+	"main.h"
+	<iostream>
+	<string.h>
+	<stdlib.h>
+	<stdio.h>
+
