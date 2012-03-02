@@ -20,3 +20,24 @@
 	<stdlib.h>
 	<stdio.h>
 
+1330507854 source:c:\documents and settings\3z\week3_tasks-4\task4_19\task4_19\main.cpp
+	"main.h"
+	"TApForm.h"
+	<iostream>
+	<string.h>
+	<stdlib.h>
+	<stdio.h>
+
+1330461898 c:\documents and settings\3z\week3_tasks-4\task4_19\task4_19\main.h
+	<iostream>
+	<string.h>
+	<stdlib.h>
+	<stdio.h>
+
+1330507494 c:\documents and settings\3z\week3_tasks-4\task4_19\task4_19\tapform.h
+	"main.h"
+	<iostream>
+	<string.h>
+	<stdlib.h>
+	<stdio.h>
+

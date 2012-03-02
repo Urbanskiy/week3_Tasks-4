@@ -14,12 +14,14 @@ public:
     TMatr(const TMatr & m);
     ~TMatr();
 
-    void SetValue(int,int,int value);
+    void SetValue(size_t,size_t,int value);
     size_t GetSIze();
-    int GetValue(int i, int j);
+    int GetValue(size_t i, size_t j);
     void FillRandom(unsigned modul);
     void PrintMatr();
-    TMatr operator=(TMatr);
+
+    int IsOK_IJ(size_t,size_t);
+    TMatr& operator=(TMatr&);
 
 };
 TMatr::TMatr()
@@ -36,17 +38,19 @@ TMatr::TMatr(size_t size)
         if( size <= 0) throw "\n Size must be bigger then zero";
 
         data = new int[size*size];
-        if(data == NULL) throw "\nCannot allocate memory for Matr";
-
     }
     catch(const char * exc)
     {
         cout << exc << endl;
     }
+    catch(...)
+    {
+        cout << "\nCannot allocate memory for Matr";
+    }
 
     SIZE = size;
-    for(int i = 0; i < size; i++)
-        for(int j = 0; j < size; j++)
+    for(size_t i = 0; i < size; i++)
+        for(size_t j = 0; j < size; j++)
             *(data + i * size + j) = 0;
 }
 TMatr::TMatr(const TMatr & m)
@@ -55,28 +59,35 @@ TMatr::TMatr(const TMatr & m)
     try
     {
         data = new int[SIZE*SIZE];
-        if(data == NULL) throw "\nCannot allocate memory for Matr";
     }
     catch(const char * exc)
     {
         cout << exc << endl;
     }
-    for(int i = 0; i < SIZE; i++)
-        for(int j = 0; j < SIZE; j++)
+    catch(...)
+    {
+       cout << "\nCannot allocate memory for Matr";
+    }
+    for(size_t i= 0; i < SIZE; i++)
+        for(size_t j = 0; j < SIZE; j++)
             *(data + i * SIZE + j) = *(m.data + i * SIZE + j) ;
 
 }
 TMatr::~TMatr()
 {
-    delete[] data;
+    if(data)
+    {
+        delete[] data;
+        data = NULL;
+    }
 }
 size_t TMatr::GetSIze()
 {
     return SIZE;
 }
-void TMatr::SetValue(int i, int j, int value)
+void TMatr::SetValue(size_t i, size_t j, int value)
 {
-    if(i < 0 || j < 0 || i >= SIZE || j >= SIZE )
+    if(!IsOK_IJ(i,j))
     {
         cout << "\nSetValue -> Arguments must be in 0..SIZE";
     }
@@ -85,77 +96,91 @@ void TMatr::SetValue(int i, int j, int value)
         *(data + i*SIZE + j) = value;
     }
 }
-int TMatr::GetValue(int i, int j)
+int TMatr::GetValue(size_t i, size_t j)
 {
-    try
-    {
-        if(i < 0 || j < 0 || i >= SIZE || j >= SIZE ) throw "\nGetValue -> Arguments must be in 0..SIZE";
-    }
-    catch(const char * exc)
-    {
-        cout << exc << endl;
-    }
-
-    return *(data + i*SIZE + j);
+    if(IsOK_IJ(i,j))
+        return *(data + i*SIZE + j);
+    else
+        cout << "\nGetValue -> Arguments must be in 0..SIZE";
 }
 void TMatr::FillRandom(unsigned modul)
 {
-    srand(time(NULL));
-    if(modul <= 0)
+    if(data)
     {
-        cout << "\n Modul must positive";
-    }
-    else
-    {
-        for(int i = 0; i < this->GetSIze(); i++)
+        srand(time(NULL));
+        if(modul <= 0)
         {
-            for(int j = 0; j < this->GetSIze(); j++)
+            cout << "\n Modul must be positive";
+        }
+        else
+        {
+            for(size_t i = 0; i < this->GetSIze(); i++)
             {
-                this->SetValue(i,j,rand()%modul);
+                for(size_t j = 0; j < this->GetSIze(); j++)
+                {
+                    this->SetValue(i,j,rand()%modul);
+                }
             }
         }
     }
-
+    else
+    {
+        cout << "\n data is NULL cannot fill random" << endl;
+    }
 }
 void TMatr::PrintMatr()
 {
-    for(int i = 0; i < SIZE; i++)
+    for(size_t i = 0; i < SIZE; i++)
     {
-        for(int j = 0; j < SIZE; j++)
+        for(size_t j = 0; j < SIZE; j++)
         {
             cout << GetValue(i,j) << "  ";
         }
         cout << endl;
     }
 }
-TMatr TMatr::operator=(TMatr RV)
+int TMatr::IsOK_IJ(size_t i,size_t j)
+{
+    if(i < 0 || j < 0 || i >= SIZE || j >= SIZE )
+        return 0;
+    return 1;
+}
+TMatr& TMatr::operator=(TMatr& RV)
 {
     try
     {
         if(RV.SIZE != this->SIZE) throw "\n RVAL->SIZE not equal LVAL->SIZE";
+        if(&RV == this) throw "\n Cannot use operator= to itself";
     }
     catch(const char * exc )
     {
         cout << exc <<endl;
     }
-    for(int i = 0; i < SIZE; i++)
+    for(size_t i = 0; i < SIZE; i++)
     {
-        for(int j = 0; j < SIZE; j++)
+        for(size_t j = 0; j < SIZE; j++)
         {
             this->SetValue(i,j, RV.GetValue(i,j));
         }
         cout << endl;
     }
+    return *this;
 }
 //---------------------------------------------------------------------------
 int GetScalar(int * first,int * second, size_t size)
 {
-    int scalar = 0;
-
-    for(int i = 0; i < size; i++)
+    if(first && second && size >= 0)
     {
-        scalar += first[i] * second[i];
+        int scalar = 0;
+
+        for(int i = 0; i < size; i++)
+        {
+            scalar += first[i] * second[i];
+        }
+        return scalar;
     }
-    return scalar;
+    else
+        cout << "first \ second is null pointer of size is wrong";
 }
 //---------------------------------------------------------------------------
+
